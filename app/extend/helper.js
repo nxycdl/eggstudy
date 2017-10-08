@@ -3,7 +3,16 @@
  */
 const moment = require('moment');
 
-exports.relativeTime = time => moment(new Date(time * 1000)).fromNow();
-exports.moment = moment;
+module.exports = {
+    relativeTime(time){
+        return moment(new Date(time * 1000)).fromNow();
+    },
+    moment: moment,
+    formatUser(user){
+        return user.username
+    }
+}
+
+
 
 

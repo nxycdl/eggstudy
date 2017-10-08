@@ -1,15 +1,6 @@
 'use strict';
-
 module.exports = app => {
-    //路由方式1 ,指定controller.method;
-    app.get('/', 'home.index');
-    //路由方式2,app.controller.name.method;
-    app.get('/index', app.controller.home.index);
-    //工程目录见https://eggjs.org/zh-cn/basics/structure.html;
-    app.get('/news/list', app.controller.home.list);
-    //调用Service的例子;使用yield 写法调用Cnode后台;
-    app.get('/news/list2',app.controller.news.list);
-
-    app.get('/news/list3',app.controller.news.list3);
-
+    require('./router/news')(app);
+    require('./router/home')(app);
+    require('./router/demo')(app);
 };
