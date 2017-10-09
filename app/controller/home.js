@@ -13,7 +13,7 @@ module.exports = app => {
         }
 
         * home() {
-            let ret = 'Npm run dev 使用的是local,另外配置文件是一个函数,需要有return,当然也有对象的;';
+            const ret = 'Npm run dev 使用的是local,另外配置文件是一个函数,需要有return,当然也有对象的;';
             this.ctx.body = ret;
         }
 
@@ -42,10 +42,45 @@ module.exports = app => {
         }
 
         async postFormSub() {
-            var params = this.ctx.request.body;
+            const params = this.ctx.request.body;
             console.log(params);
             this.ctx.body = {success: true};
+        }
+
+        async dbTestTrans() {
+
+            const conn = await app.mysql.beginTransaction(); // 初始化事务
+            try {
+                const ret = await this.ctx.service.dbService.findAll(conn);
+                console.log(ret);
+                this.ctx.body = ret;
+            } catch (err) {
+                await conn.rollback(); // 一定记得捕获异常后回滚事务！！
+                throw err;
+            }
+        }
+
+        async dbQuery() {
+            this.ctx.body = await this.ctx.service.dbService.find(2);
+        }
+
+        async insert() {
+
+            const ret = await this.ctx.service.dbService.insert('testtab', {name: 'namex'});
+            this.ctx.body = ret;
+        }
+
+        async update() {
+            console.log('xxxxx');
+            const row = {
+                id: 2,
+                name: 'name222',
+                bance: 12,
+                rq: this.app.mysql.literals.now
+            }
+            this.ctx.body = await this.ctx.service.dbService.update('testtab', row);
         }
     }
     return HomeController;
 };
+
