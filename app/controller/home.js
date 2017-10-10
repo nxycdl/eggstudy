@@ -1,5 +1,5 @@
 'use strict';
-
+const webservice = require('../extend/function/WebService');
 module.exports = app => {
     class HomeController extends app.Controller {
         * index() {
@@ -79,6 +79,80 @@ module.exports = app => {
                 rq: this.app.mysql.literals.now
             }
             this.ctx.body = await this.ctx.service.dbService.update('testtab', row);
+        }
+
+        async createJwtToken() {
+            const expires = this.ctx.helper.moment().add('days', 7).valueOf();
+            // const expires = 50;
+            const token = app.jwt.sign({foo: 'bar'}, app.config.jwt.secret, {expiresIn: expires});
+            this.ctx.body = token;
+        }
+
+        async verifyJwtToken() {
+            const createRule = {
+                accesstoken: {type: 'string', max: 255, require: true},
+            }
+            const errors = this.ctx.helper.validate(this.ctx, createRule, this.ctx.query);
+            if (errors) return;
+            const token = this.ctx.query.accesstoken;
+            let decoded = '';
+            try {
+                console.log(token, app.config.jwt.secret);
+                decoded = app.jwt.verify(token, app.config.jwt.secret);
+            } catch (err) {
+                console.log(err.message);
+                this.ctx.helper.resetCtx(this.ctx, 401, err.message);
+                return;
+            }
+            console.log('decode', decoded);
+            this.ctx.body = decoded;
+        }
+
+        async verifyJwtTokenHeader() {
+            const token = this.ctx.request.header.authorization;
+            let decoded = '';
+            try {
+                console.log(token, app.config.jwt.secret);
+                decoded = app.jwt.verify(token || '', app.config.jwt.secret);
+            } catch (err) {
+                console.log(err.message);
+                this.ctx.helper.resetCtx(this.ctx, 401, err.message);
+                return;
+            }
+            console.log('decode', decoded);
+            this.ctx.body = decoded
+        }
+
+        async callWebService() {
+            console.log('callWebService');
+            let ret = {};
+            let error = '';
+            const url = 'http://10.150.4.101:7001/RemoteFacedeBean/RemoteFacedeBeanService?WSDL';
+            const indata = '<?xml version="1.0" encoding="GBK"?><DATA><HEAD><VER>01.01</VER><APP>F1</APP><WorkDate>20170930</WorkDate><Reserve></Reserve><ErrCode>0</ErrCode><ErrDetail></ErrDetail></HEAD><MSG><HEAD><YLJGDM>00020002</YLJGDM><YYLSH>020000183486</YYLSH><YBLSH>20160824112549807315</YBLSH><FPHM>0</FPHM><SHBZH>1008616199</SHBZH><JSRQ>20170930023055</JSRQ><ZYTS>12</ZYTS><CYYY></CYYY><ZTJSBZ>0</ZTJSBZ><ZHZFBZ>0</ZHZFBZ><ZYHM>0000183486</ZYHM><CZYXM>ADMIN</CZYXM><CZRQ>20170930023055</CZRQ></HEAD></MSG></DATA>';
+            const args = {arg0: '00000001', arg1: 'F1', arg2: '127.0.0.1', arg3: indata};
+
+            try {
+                ret = await webservice.callWebService(url, args);
+            } catch (err) {
+                console.log('发了错误', err)
+                error = err;
+            }
+            if (error) {
+                this.ctx.body = error.message;
+                return;
+            }
+            ret = ret.return;
+            var options = {
+                object: false,
+                reversible: false,
+                coerce: false,
+                sanitize: true,
+                trim: true,
+                arrayNotation: false,
+                alternateTextNode: false
+            };
+            //ret = this.ctx.helper.parser.toJson(ret, options);
+            this.ctx.body = ret;
         }
     }
     return HomeController;

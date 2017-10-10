@@ -16,4 +16,8 @@ module.exports = app => {
     app.get('/dbQuery', app.controller.home.dbQuery);
     app.get('/insert', app.controller.home.insert);
     app.get('/update', app.controller.home.update);
+    app.get('/createJwtToken', app.controller.home.createJwtToken);
+    app.get('/verifyJwtToken', app.controller.home.verifyJwtToken);
+    app.get('/verifyJwtTokenHeader', app.controller.home.verifyJwtTokenHeader);
+    app.get('/callWebService', app.controller.home.callWebService);
 }

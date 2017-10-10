@@ -20,6 +20,12 @@
         <li><a href="/insert">数据库测试 -->插入</a></li>
         <li><a href="/update">数据库测试 -->更新</a></li>
         <li><a href="#">egg.js不建议直接写SQL,但是支持db.query()</a></li>
+        <li><a href="/createJwtToken">创建一个JWTtoken</a></li>
+        <li><a href="/verifyJwtToken?accesstoken=1">验证一个JWTtoken</a></li>
+        <li><a href="/verifyJwtTokenHeader?accesstoken=1">验证一个JWTtoken通过HTTP Header</a></li>
+        <li><a href="/#">注意在JWT里面使用validate插件的使用方法</a></li>
+        <li><a href="/#">Http返回的判断方法：HTTP.STATUS <> 200 弹出BODY</a></li>
+        <li><a href="/callWebService">WebService调用</a></li>
     </ul>
 
 </div>

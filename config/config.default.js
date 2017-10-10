@@ -53,6 +53,10 @@ module.exports = appInfo => {
             app: true,
             // 是否加载到 agent 上，默认关闭
             agent: false,
+        },
+        jwt: {
+            secret: 'jo0NT105',
+            enable: false
         }
     }
     return config;
