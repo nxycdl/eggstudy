@@ -128,7 +128,7 @@ module.exports = app => {
             let ret = {};
             let error = '';
             const url = 'http://10.150.4.101:7001/RemoteFacedeBean/RemoteFacedeBeanService?WSDL';
-            const indata = '<?xml version="1.0" encoding="GBK"?><DATA><HEAD><VER>01.01</VER><APP>F1</APP><WorkDate>20170930</WorkDate><Reserve></Reserve><ErrCode>0</ErrCode><ErrDetail></ErrDetail></HEAD><MSG><HEAD><YLJGDM>00020002</YLJGDM><YYLSH>020000183486</YYLSH><YBLSH>20160824112549807315</YBLSH><FPHM>0</FPHM><SHBZH>1008616199</SHBZH><JSRQ>20170930023055</JSRQ><ZYTS>12</ZYTS><CYYY></CYYY><ZTJSBZ>0</ZTJSBZ><ZHZFBZ>0</ZHZFBZ><ZYHM>0000183486</ZYHM><CZYXM>ADMIN</CZYXM><CZRQ>20170930023055</CZRQ></HEAD></MSG></DATA>';
+            const indata = '<?xml version="1.0" encoding="GBK"?><DATA><HEAD><VER>01.01</VER><APP>F1</APP><WorkDate>20170930</WorkDate><Reserve></Reserve><ErrCode>0</ErrCode><ErrDetail></ErrDetail></HEAD><MSG><HEAD><YLJGDM>00020001</YLJGDM><YYLSH>020000183486</YYLSH><YBLSH>20160824112549807315</YBLSH><FPHM>0</FPHM><SHBZH>1008616199</SHBZH><JSRQ>20170930023055</JSRQ><ZYTS>12</ZYTS><CYYY></CYYY><ZTJSBZ>0</ZTJSBZ><ZHZFBZ>0</ZHZFBZ><ZYHM>0000183486</ZYHM><CZYXM>ADMIN</CZYXM><CZRQ>20170930023055</CZRQ></HEAD></MSG></DATA>';
             const args = {arg0: '00000001', arg1: 'F1', arg2: '127.0.0.1', arg3: indata};
 
             try {
@@ -142,17 +142,54 @@ module.exports = app => {
                 return;
             }
             ret = ret.return;
-            var options = {
-                object: false,
-                reversible: false,
-                coerce: false,
-                sanitize: true,
-                trim: true,
-                arrayNotation: false,
-                alternateTextNode: false
-            };
-            //ret = this.ctx.helper.parser.toJson(ret, options);
+            ret = await this.ctx.helper.xml2js.parseString(ret);
+            const errCode = ret.DATA.HEAD[0].ErrCode[0];
+            const errDetail = ret.DATA.HEAD[0].ErrDetail[0];
+            if (errCode != 0) {
+                this.ctx.body = errDetail;
+                return;
+            }
             this.ctx.body = ret;
+        }
+
+        async redisTest() {
+            const {ctx, app} = this;
+            // set 10second display;
+            await app.redis.set('foo', 'bar', 'EX', 10);
+            // get
+            const foo = await app.redis.get('foo');
+
+            await app.redis.set('js', {name: '张三', sex: 1, age: 19})
+
+            const js = await app.redis.get('js');
+
+            const array = [{name: '王五', sex: 1, age: 19}, {name: '哈师傅', sex: 1, age: 19}, {
+                qq: '123',
+                weixin: '456'
+            }];
+
+
+            await app.redis.set('arr', JSON.stringify(array));
+
+            const arr = await app.redis.get('arr');
+
+            await app.redis.sadd('key1', array);
+            await app.redis.sadd('key2', [1, 3, 5, 7]);
+
+            const key1 = await app.redis.smembers('key1');
+            const key2 = await app.redis.smembers('key2');
+
+
+            this.ctx.body = `${foo}\n${js}\n${arr}\n${key2}\n${key1}`;
+
+        }
+
+        async redisPublish() {
+            this.ctx.body = `订阅某个频道比如：study，使用客户端public study "your message" \n可以有多个客户端都订阅study，那么一旦发送消息所有客户端都能收到消息 
+            订阅的主要入口实现在appBeforeStart`;
+            this.app.count = (this.app.count === undefined ? 0 : this.app.count);
+            // console.log(this.app.redis);
+            await this.app.redis.lpush('list', this.app.count + 1);
         }
     }
     return HomeController;

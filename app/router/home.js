@@ -20,4 +20,6 @@ module.exports = app => {
     app.get('/verifyJwtToken', app.controller.home.verifyJwtToken);
     app.get('/verifyJwtTokenHeader', app.controller.home.verifyJwtTokenHeader);
     app.get('/callWebService', app.controller.home.callWebService);
+    app.get('/redisTest', app.controller.home.redisTest);
+    app.get('/redisPublish', app.controller.home.redisPublish);
 }

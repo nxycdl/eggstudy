@@ -26,6 +26,8 @@
         <li><a href="/#">注意在JWT里面使用validate插件的使用方法</a></li>
         <li><a href="/#">Http返回的判断方法：HTTP.STATUS <> 200 弹出BODY</a></li>
         <li><a href="/callWebService">WebService调用</a></li>
+        <li><a href="/redisTest">redisTestp普通的GET PUT</a></li>
+        <li><a href="/redisPublish">redis发布订阅模式</a></li>
     </ul>
 
 </div>

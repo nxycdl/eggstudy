@@ -9,5 +9,27 @@ module.exports = app => {
         // 后续数据的更新由定时任务自动触发
         console.log('手工执行定时任务');
         yield app.runSchedule('scheduletwo');
+
+        // 如果启用了redis;
+        /* if (app.config.redis.app) {
+            const subscribe = yield app.redis.subscribe('news', 'music');
+            console.log('subscribe redis \t' + subscribe);
+
+            app.redis.on('message', function (channel, message) {
+                if (channel === 'news') {
+                    console.log('news channel:' + message)
+                } else if (channel === 'music') {
+                    console.log('music channel:' + message)
+                }
+            });
+        }*/
+
+        setTimeout(() => {
+            app.redis.set('foo','foo');
+        }, 1000)
+    });
+    app.ready(() => {
+        console.log('ready');
     });
 };
+

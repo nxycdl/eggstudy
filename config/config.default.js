@@ -1,4 +1,5 @@
 'use strict';
+const path = require('path');
 module.exports = appInfo => {
     const config = exports = {
 
@@ -7,7 +8,11 @@ module.exports = appInfo => {
         // config.keys : 'egg_1507377681959_2214',
 
         // add your config here
-        middleware: [],
+        middleware: ['requestFilter'],
+
+        requestFilter: {
+            enable: true
+        },
 
         // add view config
         view: {
@@ -57,6 +62,26 @@ module.exports = appInfo => {
         jwt: {
             secret: 'jo0NT105',
             enable: false
+        },
+        redis: {
+            // 这里使用2个redis的客户端;
+            clients: {
+                sub: {
+                    port: 6380, // Redis port
+
+                    db: 0,
+                },
+                red: {
+                    port: 6380, // Redis port
+
+                    db: 0,
+                }
+            }
+        },
+        customLogger: {
+            requestLogger: {
+                file: path.join(appInfo.root, `logs/${appInfo.name}/requestLogger.log`),
+            },
         }
     }
     return config;

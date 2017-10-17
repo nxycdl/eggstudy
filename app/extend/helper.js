@@ -1,12 +1,13 @@
 'use strict';
 
 const moment = require('moment');
+const xml2js = require('./function/xm2js');
 
 module.exports = {
     relativeTime(time) {
         return moment(new Date(time * 1000)).fromNow();
     },
-    moment: moment,
+    moment,
     formatUser(user) {
         return user.username
     },
@@ -26,6 +27,7 @@ module.exports = {
     resetCtx(ctx, status, body) {
         ctx.body = body;
         ctx.status = status;
-    }
+    },
+    xml2js
 }
 
