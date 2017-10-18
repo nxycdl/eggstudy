@@ -8,7 +8,6 @@ module.exports = app => {
             yield next;
             const end = new Date();
             const time = end.getTime() - start.getTime();
-            console.log(this.request.ip);
             this.app.getLogger('requestLogger').info(`\t${this.request.ip}\t${this.request.method}\t${this.path}\t${this.status}\t${time}ms\t`);
         }
     }

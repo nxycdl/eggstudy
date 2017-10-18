@@ -11,21 +11,23 @@ module.exports = app => {
         yield app.runSchedule('scheduletwo');
 
         // 如果启用了redis;
-        /* if (app.config.redis.app) {
-            const subscribe = yield app.redis.subscribe('news', 'music');
+        if (app.config.redis.app) {
+            const subscribe = yield app.redis.get('sub').subscribe('news', 'music');
             console.log('subscribe redis \t' + subscribe);
 
-            app.redis.on('message', function (channel, message) {
+            app.redis.get('sub').on('message', function (channel, message) {
                 if (channel === 'news') {
                     console.log('news channel:' + message)
                 } else if (channel === 'music') {
                     console.log('music channel:' + message)
                 }
             });
-        }*/
+        }
 
         setTimeout(() => {
-            app.redis.set('foo','foo');
+            if (app.config.redis.app) {
+                app.redis.get('red').set('foo', 'foo');
+            }
         }, 1000)
     });
     app.ready(() => {

@@ -73,7 +73,7 @@ module.exports = appInfo => {
                 },
                 red: {
                     port: 6380, // Redis port
-
+                    
                     db: 0,
                 }
             }

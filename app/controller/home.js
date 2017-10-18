@@ -155,32 +155,38 @@ module.exports = app => {
         async redisTest() {
             const {ctx, app} = this;
             // set 10second display;
-            await app.redis.set('foo', 'bar', 'EX', 10);
+            const redis = app.redis.get('red');
+            await redis.set('foo', 'bar', 'EX', 10);
+            // const foo = await app.redis.get('red').set('foo', 'bar', 'EX', 10).get('foo');
             // get
-            const foo = await app.redis.get('foo');
+            const foo = redis.get('foo');
+            redis.set('foo1', 'foot');
+            const foo1 = redis.get('foot1');
 
-            await app.redis.set('js', {name: '张三', sex: 1, age: 19})
+            /*await app.redis.get('red').set('js', {name: '张三', sex: 1, age: 19})
 
-            const js = await app.redis.get('js');
+             const js = await app.redis.get('red').get('js');
 
-            const array = [{name: '王五', sex: 1, age: 19}, {name: '哈师傅', sex: 1, age: 19}, {
-                qq: '123',
-                weixin: '456'
-            }];
-
-
-            await app.redis.set('arr', JSON.stringify(array));
-
-            const arr = await app.redis.get('arr');
-
-            await app.redis.sadd('key1', array);
-            await app.redis.sadd('key2', [1, 3, 5, 7]);
-
-            const key1 = await app.redis.smembers('key1');
-            const key2 = await app.redis.smembers('key2');
+             const array = [{name: '王五', sex: 1, age: 19}, {name: '哈师傅', sex: 1, age: 19}, {
+             qq: '123',
+             weixin: '456'
+             }];
 
 
-            this.ctx.body = `${foo}\n${js}\n${arr}\n${key2}\n${key1}`;
+             await app.redis.get('red').set('arr', JSON.stringify(array));
+
+             const arr = await app.redis.get('red').get('arr');
+
+             await app.redis.get('red').sadd('key1', array);
+             await app.redis.get('red').sadd('key2', [1, 3, 5, 7]);
+
+             const key1 = await app.redis.get('red').smembers('key1');
+             const key2 = await app.redis.get('red').smembers('key2');
+
+
+             this.ctx.body = `${foo}\n${js}\n${arr}\n${key2}\n${key1}`;
+             */
+            this.ctx.body = `1`;
 
         }
 
@@ -189,7 +195,7 @@ module.exports = app => {
             订阅的主要入口实现在appBeforeStart`;
             this.app.count = (this.app.count === undefined ? 0 : this.app.count);
             // console.log(this.app.redis);
-            await this.app.redis.lpush('list', this.app.count + 1);
+            await this.app.redis.get('red').lpush('list', this.app.count + 1);
         }
     }
     return HomeController;

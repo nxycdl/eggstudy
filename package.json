@@ -4,34 +4,32 @@
   "description": "my egg first study",
   "private": true,
   "dependencies": {
-    "co": "^4.6.0",
-    "egg": "^1.8.0",
+    "egg": "^1.9.0",
     "egg-jwt": "^2.2.0",
     "egg-mysql": "^3.0.0",
     "egg-redis": "^1.0.2",
-    "egg-scripts": "^1.2.0",
+    "egg-scripts": "^2.1.0",
     "egg-validate": "^1.0.0",
     "egg-view-nunjucks": "^2.1.4",
-    "moment": "^2.18.1",
+    "moment": "^2.19.1",
     "soap": "^0.22.0",
-    "xml2js": "^0.4.19",
-    "xml2json": "^0.11.0"
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
-    "autod": "^2.9.0",
+    "autod": "^2.10.1",
     "autod-egg": "^1.0.0",
-    "egg-bin": "^4.3.0",
+    "egg-bin": "^4.3.5",
     "egg-ci": "^1.8.0",
-    "egg-mock": "^3.12.0",
-    "eslint": "^4.7.0",
-    "eslint-config-egg": "^5.1.0",
+    "egg-mock": "^3.13.0",
+    "eslint": "^4.9.0",
+    "eslint-config-egg": "^5.1.1",
     "webstorm-disable-index": "^1.2.0"
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon",
+    "start": "egg-scripts start --port=7001 --daemon --workers=2 --title=egg-server-showcase",
     "stop": "egg-scripts stop",
     "dev": "egg-bin dev --port 7001",
     "debug": "egg-bin debug",
