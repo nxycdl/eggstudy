@@ -4,10 +4,10 @@ module.exports = app => {
     class HomeController extends app.Controller {
         * index() {
             // console.log(app.nunjucks);
-            console.log(this.ctx.crfs);
-            console.log(this.ctx.helper.relativeTime(2));
-            console.log(this.ctx.helper.moment(new Date()).format('yyyymmdd'));
-            console.log(this.ctx.helper.formatUser({username: 'dl', sex: '1'}));
+            // console.log(this.ctx.crfs);
+            // console.log(this.ctx.helper.relativeTime(2));
+            // console.log(this.ctx.helper.moment(new Date()).format('yyyymmdd'));
+            // console.log(this.ctx.helper.formatUser({username: 'dl', sex: '1'}));
             yield this.ctx.render('home/home.tpl', []);
 
         }
@@ -43,7 +43,7 @@ module.exports = app => {
 
         async postFormSub() {
             const params = this.ctx.request.body;
-            console.log(params);
+            // console.log(params);
             this.ctx.body = {success: true};
         }
 
@@ -52,7 +52,7 @@ module.exports = app => {
             const conn = await app.mysql.beginTransaction(); // 初始化事务
             try {
                 const ret = await this.ctx.service.dbService.findAll(conn);
-                console.log(ret);
+                // console.log(ret);
                 this.ctx.body = ret;
             } catch (err) {
                 await conn.rollback(); // 一定记得捕获异常后回滚事务！！
@@ -71,7 +71,7 @@ module.exports = app => {
         }
 
         async update() {
-            console.log('xxxxx');
+            // console.log('xxxxx');
             const row = {
                 id: 2,
                 name: 'name222',
@@ -82,8 +82,9 @@ module.exports = app => {
         }
 
         async createJwtToken() {
-            const expires = this.ctx.helper.moment().add('days', 7).valueOf();
-            // const expires = 50;
+            // const expires = this.ctx.helper.moment().add('days', 1).valueOf();
+            // console.log(expires);
+            const expires = 60;
             const token = app.jwt.sign({foo: 'bar'}, app.config.jwt.secret, {expiresIn: expires});
             this.ctx.body = token;
         }
@@ -97,34 +98,32 @@ module.exports = app => {
             const token = this.ctx.query.accesstoken;
             let decoded = '';
             try {
-                console.log(token, app.config.jwt.secret);
                 decoded = app.jwt.verify(token, app.config.jwt.secret);
             } catch (err) {
-                console.log(err.message);
+                // console.log(err.message);
                 this.ctx.helper.resetCtx(this.ctx, 401, err.message);
                 return;
             }
-            console.log('decode', decoded);
-            this.ctx.body = decoded;
+            this.ctx.body = '这里获取到的时间就是最后要过期的时间：\t' + JSON.stringify(decoded);
         }
 
         async verifyJwtTokenHeader() {
             const token = this.ctx.request.header.authorization;
             let decoded = '';
             try {
-                console.log(token, app.config.jwt.secret);
+                // console.log(token, app.config.jwt.secret);
                 decoded = app.jwt.verify(token || '', app.config.jwt.secret);
             } catch (err) {
-                console.log(err.message);
+                // console.log(err.message);
                 this.ctx.helper.resetCtx(this.ctx, 401, err.message);
                 return;
             }
-            console.log('decode', decoded);
+            // console.log('decode', decoded);
             this.ctx.body = decoded
         }
 
         async callWebService() {
-            console.log('callWebService');
+            // console.log('callWebService');
             let ret = {};
             let error = '';
             const url = 'http://10.150.4.101:7001/RemoteFacedeBean/RemoteFacedeBeanService?WSDL';
@@ -134,7 +133,7 @@ module.exports = app => {
             try {
                 ret = await webservice.callWebService(url, args);
             } catch (err) {
-                console.log('发了错误', err)
+                // console.log('发了错误', err)
                 error = err;
             }
             if (error) {
@@ -155,6 +154,10 @@ module.exports = app => {
         async redisTest() {
             const {ctx, app} = this;
             // set 10second display;
+            if (!app.config.redis.app) {
+                this.ctx.body = 'redis 插件未开启';
+                return;
+            }
             const redis = app.redis.get('red');
             await redis.set('foo', 'bar', 'EX', 10);
             // const foo = await app.redis.get('red').set('foo', 'bar', 'EX', 10).get('foo');
@@ -163,7 +166,7 @@ module.exports = app => {
             redis.set('foo1', 'foot');
             const foo1 = redis.get('foot1');
 
-            /*await app.redis.get('red').set('js', {name: '张三', sex: 1, age: 19})
+            /* await app.redis.get('red').set('js', {name: '张三', sex: 1, age: 19})
 
              const js = await app.redis.get('red').get('js');
 
@@ -186,11 +189,15 @@ module.exports = app => {
 
              this.ctx.body = `${foo}\n${js}\n${arr}\n${key2}\n${key1}`;
              */
-            this.ctx.body = `1`;
+            this.ctx.body = `${foo}`;
 
         }
 
         async redisPublish() {
+            if (!this.app.config.redis.app) {
+                this.ctx.body = 'redis 插件未开启';
+                return;
+            }
             this.ctx.body = `订阅某个频道比如：study，使用客户端public study "your message" \n可以有多个客户端都订阅study，那么一旦发送消息所有客户端都能收到消息 
             订阅的主要入口实现在appBeforeStart`;
             this.app.count = (this.app.count === undefined ? 0 : this.app.count);

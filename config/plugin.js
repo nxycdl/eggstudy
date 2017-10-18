@@ -20,7 +20,7 @@ module.exports = {
         package: 'egg-validate',
     },
     redis: {
-        enable: true,
+        enable: false,
         package: 'egg-redis',
     }
 }
