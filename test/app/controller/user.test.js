@@ -3,7 +3,7 @@
  */
 'use strict';
 
-const { app, assert } = require('egg-mock/bootstrap');
+const {app, assert} = require('egg-mock/bootstrap');
 
 describe('test/app/controller/user.test.js', () => {
 
@@ -21,13 +21,29 @@ describe('test/app/controller/user.test.js', () => {
             .expect(200);
     });
 
-    it('user login ', () => {
+    it('user login username ', () => {
         return app.httpRequest()
             .post('/user/login')
             .set('Content-Type', 'application/json; charset=utf-8')
-            .send({ username: 'username', password: '123456' })
-            //.expect(1)
-            .expect(200);
+            .send({username: 'username', password: '123456'})
+            .expect(200)
+            .then(response => {
+                assert(response.body.code === 0)
+            });
+
+    });
+
+
+    it('user login 0000 ', () => {
+        return app.httpRequest()
+            .post('/user/login')
+            .set('Content-Type', 'application/json; charset=utf-8')
+            .send({username: '0000', password: '0000'})
+            .expect(200)
+            .then(response => {
+                assert(response.body.code === 1)
+                /*const token = response.body.data.token;*/
+            });
 
     });
 });
