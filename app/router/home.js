@@ -9,8 +9,10 @@ module.exports = app => {
     app.get('/index', app.controller.home.index);
 
     app.get('/postForm', app.controller.home.postForm);
+    app.get('/postForm2', app.controller.home.postForm2);
 
     app.post('/postFormSub', app.controller.home.postFormSub);
+    app.post('/postFormSub2', app.controller.home.postFormSub2);
 
     app.get('/dbTestTrans', app.controller.home.dbTestTrans);
     app.get('/dbQuery', app.controller.home.dbQuery);

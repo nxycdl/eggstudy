@@ -4,7 +4,7 @@
 'use strict'
 const soap = require('soap');
 
-async function createClient(url) {
+async function createClient (url) {
     const promise = new Promise(function (resolve, reject) {
         soap.createClientAsync(url).then(client => {
             resolve(client)
@@ -15,7 +15,7 @@ async function createClient(url) {
     return promise;
 }
 
-async function biz(client, args) {
+async function biz (client, args) {
     const promise = new Promise(function (resolve, reject) {
         console.log('bizxxxxxx');
         client.biz(args, (err, result) => {
@@ -26,11 +26,11 @@ async function biz(client, args) {
     return promise;
 }
 
-async function callWebService(url, args) {
+async function callWebService (url, args) {
     console.log('call createClient');
     const client = await createClient(url);
     const data = await biz(client, args);
     return data;
 
 }
-module.exports = {callWebService};
+module.exports = { callWebService };

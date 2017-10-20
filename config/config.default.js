@@ -8,10 +8,13 @@ module.exports = appInfo => {
         // config.keys : 'egg_1507377681959_2214',
 
         // add your config here
-        middleware: ['requestFilter'],
+        middleware: ['requestFilter', 'errorHandler'],
 
         requestFilter: {
             enable: true
+        },
+        errorHandler: {
+            match: ['/user', '/api'],
         },
 
         // add view config
@@ -34,12 +37,9 @@ module.exports = appInfo => {
                 ignore: '/postDemo',
                 queryName: '_csrf', // 通过 query 传递 CSRF token 的默认字段为 _csrf
                 bodyName: '_csrf', // 通过 body 传递 CSRF token 的默认字段为 _csrf
+                ignoreJSON: true
             },
         },
-        // 是否启用CSRF,
-        /* exports.security : {
-         csrf: false
-         }, */
         mysql: {
             // 单数据库信息配置
             client: {
@@ -68,12 +68,14 @@ module.exports = appInfo => {
             clients: {
                 sub: {
                     port: 6380, // Redis port
-
+                    host: '127.0.0.1', // Redis host
+                    password: 'null', // Redis password;
                     db: 0,
                 },
                 red: {
                     port: 6380, // Redis port
-                    
+                    host: '127.0.0.1', // Redis host
+                    password: 'null', // Redis password;
                     db: 0,
                 }
             }

@@ -4,7 +4,7 @@
 'use strict'
 const _parseString = require('xml2js').parseString;
 
-async function parseString(xml) {
+async function parseString (xml) {
     const promise = new Promise((resolve, reject) => {
         _parseString(xml, function (err, result) {
             if (err) reject(err);
@@ -13,4 +13,4 @@ async function parseString(xml) {
     });
     return promise;
 }
-module.exports = { parseString}
+module.exports = { parseString }

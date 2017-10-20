@@ -10,7 +10,7 @@ module.exports = app => {
             disable: app.config.env === 'local', // 本地开发环境不执行
         },
         // task 是真正定时任务执行时被运行的函数，第一个参数是一个匿名的 Context 实例
-        async task(ctx) {
+        async task (ctx) {
             console.log('start task1');
             const res = await ctx.curl('http://localhost:7001/getDemo/gettwo/1/2/3');
             console.log('xxxxxx', res.data.toString());

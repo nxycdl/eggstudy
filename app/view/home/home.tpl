@@ -15,6 +15,7 @@
         <li><a href="/getDemo/getone?id=1&&name=dl">get请求?id=1&&name=2,通过this.ctx.query获取参数</a></li>
         <li><a href="/getDemo/gettwo/1/2/3">get请求restful方式/1/2/3/4/5通过this.ctx.params获取参数</a></li>
         <li><a href="/postForm">PostForm</a></li>
+        <li><a href="/postForm2">PostForm2</a></li>
         <li><a href="/dbTestTrans">数据库测试 -->带事物的写法</a></li>
         <li><a href="/dbQuery">数据库测试 -->查询</a></li>
         <li><a href="/insert">数据库测试 -->插入</a></li>

@@ -1,4 +1,9 @@
+'use strict';
 module.exports = app => {
+    global._ = require('lodash');
+    console.log(__dirname + '/app/')
+    const _f = require('./init')(__dirname + '/app/');
+    _.extend(_, _f);
     app.beforeStart(function*() {
         // 应用会等待这个函数执行完成才启动
         setTimeout(() => {
@@ -7,8 +12,7 @@ module.exports = app => {
 
         // 保证应用启动监听端口前数据已经准备好了
         // 后续数据的更新由定时任务自动触发
-        console.log('手工执行定时任务');
-        yield app.runSchedule('scheduletwo');
+
 
         // 如果启用了redis;
         if (app.config.redis.app) {
@@ -30,8 +34,11 @@ module.exports = app => {
             }
         }, 1000)
     });
-    app.ready(() => {
+    app.ready(function*() {
         console.log('ready');
+        console.log('手工执行定时任务');
+        yield app.runSchedule('scheduletwo');
     });
+
 };
 

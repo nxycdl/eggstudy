@@ -3,14 +3,14 @@
  */
 module.exports = app => {
     class NewsService extends app.Service {
-        *list(page = 1, tab = good, limit = 20) {
-            const {serverUrl, pageSize} = this.app.config.news;
+        * list (page = 1, tab = good, limit = 20) {
+            const { serverUrl, pageSize } = this.app.config.news;
 
-            const {data: ret} = yield this.ctx.curl(`${serverUrl}/topics`, {
+            const { data: ret } = yield this.ctx.curl(`${serverUrl}/topics`, {
                 data: {
-                    page: page,
-                    tab: tab,
-                    limit: limit
+                    page,
+                    tab,
+                    limit
                 },
                 dataType: 'json',
             });
@@ -18,14 +18,14 @@ module.exports = app => {
         }
 
 
-        async list3(page = 1, tab = good, limit = 20) {
-            const {serverUrl, pageSize} = this.app.config.news;
+        async list3 (page = 1, tab = good, limit = 20) {
+            const { serverUrl, pageSize } = this.app.config.news;
 
-            const {data: ret} = await this.ctx.curl(`${serverUrl}/topics`, {
+            const { data: ret } = await this.ctx.curl(`${serverUrl}/topics`, {
                 data: {
-                    page: page,
-                    tab: tab,
-                    limit: limit
+                    page,
+                    tab,
+                    limit
                 },
                 dataType: 'json',
             });

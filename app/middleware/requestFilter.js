@@ -2,7 +2,7 @@
  * Created by dl on 2017-10-16.
  */
 module.exports = app => {
-    return function* requestFilter(next) {
+    return function* requestFilter (next) {
         if (app.enable || true) {
             const start = new Date();
             yield next;

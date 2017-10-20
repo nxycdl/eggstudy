@@ -4,7 +4,7 @@
  * 在应用启动时会基于扩展后的 prototype 生成 app 对象。
  */
 module.exports = {
-    foo(param) {
+    foo (param) {
 
     },
 };

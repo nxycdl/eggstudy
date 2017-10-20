@@ -5,11 +5,11 @@
 
  */
 module.exports = {
-    get isIOS() {
+    get isIOS () {
         const iosReg = /iphone|ipad|ipod/i;
         return iosReg.test(this.get('user-agent'));
     },
-    get currentPath() {
-        return "d:\\";
+    get currentPath () {
+        return 'd:\\';
     }
 }

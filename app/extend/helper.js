@@ -4,14 +4,14 @@ const moment = require('moment');
 const xml2js = require('./function/xm2js');
 
 module.exports = {
-    relativeTime(time) {
+    relativeTime (time) {
         return moment(new Date(time * 1000)).fromNow();
     },
     moment,
-    formatUser(user) {
+    formatUser (user) {
         return user.username
     },
-    validate(ctx, createRule, body = ctx.request.body) {
+    validate (ctx, createRule, body = ctx.request.body) {
         let message = '';
         try {
             ctx.validate(createRule, body);
@@ -24,7 +24,7 @@ module.exports = {
         }
         return message;
     },
-    resetCtx(ctx, status, body) {
+    resetCtx (ctx, status, body) {
         ctx.body = body;
         ctx.status = status;
     },
