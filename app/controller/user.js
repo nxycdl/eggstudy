@@ -152,6 +152,7 @@ module.exports = app => {
             const errors = this.ctx.helper.validate(this.ctx, createRule, this.ctx.request.body);
             if (errors) return;
             const { username, password } = this.ctx.request.body;
+
             const user = await this.ctx.service.userService.findByUserName(username);
 
             if (user.length === 0) {
@@ -285,7 +286,7 @@ module.exports = app => {
             let decode = {};
             decode = app.jwt.verify(token, app.config.jwt.secret);
             console.log(decode);
-            const user = await this.ctx.service.userService.find(32);
+            const user = await this.ctx.service.userService.find(decode.id);
             console.log(_.isNull(user), _.isUndefined(user));
             if (_.isNull(user) || _.isUndefined(user)) {
                 this.ctx.body = global._.rjson.out(0, '用户不存在');
