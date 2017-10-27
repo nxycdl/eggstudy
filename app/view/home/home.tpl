@@ -29,6 +29,7 @@
         <li><a href="/callWebService">WebService调用</a></li>
         <li><a href="/redisTest">redisTestp普通的GET PUT</a></li>
         <li><a href="/redisPublish">redis发布订阅模式</a></li>
+        <li><a href="/uploadFilePage">文件上传</a></li>
     </ul>
 
 </div>

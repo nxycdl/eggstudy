@@ -1,5 +1,10 @@
 'use strict';
 const webservice = require('../extend/function/WebService');
+const path = require('path');
+const sendToWormhole = require('stream-wormhole');
+const co = require('co');
+const awaitWriteStream = require('await-stream-ready').write;
+const fs = require('fs');
 module.exports = app => {
     class HomeController extends app.Controller {
         * index () {
@@ -216,6 +221,92 @@ module.exports = app => {
             // console.log(this.app.redis);
             await this.app.redis.get('red').lpush('list', this.app.count + 1);
         }
+
+        async uploadFilePage () {
+            await this.ctx.render('home/uploadFile.tpl', []);
+        }
+
+        async uploadFileOSS () {
+            const stream = await this.ctx.getFileStream();
+            const name = 'egg-multipart-test/' + path.basename(stream.filename);
+            console.log(name);
+            let result;
+            try {
+                // process file or upload to cloud storage
+                result = await this.ctx.oss.put(name, stream);
+            } catch (err) {
+                // must consume the stream, otherwise browser will be stuck.
+                await sendToWormhole(stream);
+                throw err;
+            }
+            this.ctx.body = {
+                url: result.url,
+                // process form fields by `stream.fields`
+                fields: stream.fields,
+            };
+        }
+
+        async uploadFile () {
+            const parts = this.ctx.multipart({ autoFields: true });
+            const files = [];
+            let stream;
+            const i = 0;
+            while ((stream = await parts()) != null) {
+                const filename = stream.filename.toLowerCase();
+                const target = path.join(this.app.baseDir, '/app/public/file', filename);
+                const writeStream = fs.createWriteStream(target);
+                try {
+                    await awaitWriteStream(stream.pipe(writeStream));
+                } finally {
+                    await sendToWormhole(stream);
+                }
+                files.push(filename);
+            }
+            this.ctx.body = { success: true, files };
+        }
+
+
+        /**
+         * 测试成功
+         */
+        async uploadFile2 () {
+
+            const stream = await this.ctx.getFileStream();
+            const filepath = path.join(this.app.baseDir + '/app/public', `file/${stream.filename}`);
+            console.log(filepath);
+            await this.saveStream(stream, filepath);
+            this.ctx.body = {
+                file: stream.filename,
+                fields: stream.fields,
+            };
+        }
+
+        saveStream (stream, filepath) {
+            return new Promise((resolve, reject) => {
+                if (filepath.indexOf('/read-error-') > 0) {
+                    stream.once('readable', () => {
+                        const buf = stream.read(10240);
+                        console.log('read %d bytes', buf.length);
+                        setTimeout(() => {
+                            reject(new Error('mock read error'));
+                        }, 1000);
+                    });
+                } else {
+                    const ws = require('fs').createWriteStream(filepath);
+                    stream.pipe(ws);
+                    ws.on('error', reject);
+                    ws.on('finish', resolve);
+                }
+            });
+        }
+
+        multipartFile (ctx) {
+            return co(function* () {
+                ctx.multipart();
+            });
+        }
+
+
     }
     return HomeController;
 };

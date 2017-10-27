@@ -24,4 +24,6 @@ module.exports = app => {
     app.get('/callWebService', app.controller.home.callWebService);
     app.get('/redisTest', app.controller.home.redisTest);
     app.get('/redisPublish', app.controller.home.redisPublish);
+    app.get('/uploadFilePage', app.controller.home.uploadFilePage);
+    app.post('/uploadFile', app.controller.home.uploadFile);
 }

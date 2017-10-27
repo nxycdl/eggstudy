@@ -3,7 +3,7 @@
  */
 'use strict';
 module.exports = {
-    out: function (code = 0, err = '', data = '') {
+    out (code = 0, err = '', data = '') {
         return {
             code, err, data
         };

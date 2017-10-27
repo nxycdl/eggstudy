@@ -8,13 +8,13 @@ module.exports = appInfo => {
         // config.keys : 'egg_1507377681959_2214',
 
         // add your config here
-        middleware: ['requestFilter', 'errorHandler'],
+        middleware: [ 'requestFilter', 'errorHandler' ],
 
         requestFilter: {
             enable: true
         },
         errorHandler: {
-            match: ['/user', '/api'],
+            match: [ '/user', '/api', '/topic' ],
         },
 
         // add view config
@@ -84,6 +84,18 @@ module.exports = appInfo => {
             requestLogger: {
                 file: path.join(appInfo.root, `logs/${appInfo.name}/requestLogger.log`),
             },
+        },
+        multipart: {
+            fileSize: '50mb',
+            whitelist: [
+                '.jpg', '.jpeg', // image/jpeg
+                '.png', // image/png, image/x-png
+                '.gif', // image/gif
+                '.bmp', // image/bmp
+                '.sql',
+                '.txt',
+                '.log'
+            ]
         }
     }
     return config;

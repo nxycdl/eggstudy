@@ -6,6 +6,7 @@ module.exports = function (root) {
     return {
         rjson: require(root + '/function/returnout'),
         sign: require(root + '/function/sign'),
-        validateID: require(root + '/function/validateID')
+        validateID: require(root + '/function/validateID'),
+        string: require(root + '/function/string')
     }
 }

@@ -1,6 +1,7 @@
 /**
  * Created by Administrator on 2017-10-07.
  */
+'use strict'
 module.exports = app => {
     class NewsService extends app.Service {
         * list (page = 1, tab = good, limit = 20) {

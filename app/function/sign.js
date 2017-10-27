@@ -1,21 +1,21 @@
-var createNonceStr = function () {
+const createNonceStr = function () {
     return Math.random().toString(36).substr(2, 15);
 };
 
-var createTimestamp = function () {
+const createTimestamp = function () {
     return parseInt(new Date().getTime() / 1000) + '';
 };
 
-var raw = function (args) {
-    var keys = Object.keys(args);
+const raw = function (args) {
+    let keys = Object.keys(args);
     keys = keys.sort()
-    var newArgs = {};
+    const newArgs = {};
     keys.forEach(function (key) {
         newArgs[key.toLowerCase()] = args[key];
     });
 
-    var string = '';
-    for (var k in newArgs) {
+    let string = '';
+    for (const k in newArgs) {
         string += '&' + k + '=' + newArgs[k];
     }
     string = string.substr(1);
@@ -30,14 +30,14 @@ var raw = function (args) {
  *
  * @returns
  */
-var sign = function (jsapi_ticket, url) {
-    var ret = {
-        jsapi_ticket: jsapi_ticket,
+const sign = function (jsapi_ticket, url) {
+    const ret = {
+        jsapi_ticket,
         nonceStr: createNonceStr(),
         timestamp: createTimestamp(),
-        url: url
+        url
     };
-    var string = raw(ret);
+    const string = raw(ret);
     jsSHA = require('jssha');
     shaObj = new jsSHA(string, 'TEXT');
     ret.signature = shaObj.getHash('SHA-1', 'HEX');

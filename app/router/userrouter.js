@@ -7,4 +7,5 @@ module.exports = app => {
     app.get('/user/getUserinfoByToken', app.controller.user.getUserinfoByToken);
     app.post('/user/login', app.controller.user.login);
     app.post('/user/logout', app.controller.user.logout);
+    app.post('/user/changepwd', app.controller.user.changepwd);
 }

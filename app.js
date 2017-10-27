@@ -4,7 +4,7 @@ module.exports = app => {
     console.log(__dirname + '/app/')
     const _f = require('./init')(__dirname + '/app/');
     _.extend(_, _f);
-    app.beforeStart(function*() {
+    app.beforeStart(function* () {
         // 应用会等待这个函数执行完成才启动
         setTimeout(() => {
             console.log('应用会等待这个函数执行完成才启动');
@@ -34,7 +34,7 @@ module.exports = app => {
             }
         }, 1000)
     });
-    app.ready(function*() {
+    app.ready(function* () {
         console.log('ready');
         console.log('手工执行定时任务');
         yield app.runSchedule('scheduletwo');
